@@ -1,0 +1,23 @@
+# Build artefacts and machine-specific environments only.
+# Everything else in this folder is tracked deliberately.
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# Local instance config (absolute paths + any keys for THIS machine)
+.env
+mainframe/.env
+mainframe-app/backend/.env
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/

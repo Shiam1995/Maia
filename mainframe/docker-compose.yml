@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: mainframe
+      POSTGRES_PASSWORD: mainframe
+      POSTGRES_DB: mainframe
+    ports:
+      - "5432:5432"
+    volumes:
+      - mainframe_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mainframe"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://mainframe:mainframe@db:5432/mainframe
+      LLM_PROVIDER: ${LLM_PROVIDER:-heuristic}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      USDA_API_KEY: ${USDA_API_KEY:-DEMO_KEY}
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - mainframe_uploads:/app/uploads
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - api
+    environment:
+      # Vite reads this at build time; for local dev the app defaults to :8000.
+      VITE_API_BASE: http://localhost:8000
+    ports:
+      - "5173:80"
+
+volumes:
+  mainframe_pgdata:
+  mainframe_uploads:
