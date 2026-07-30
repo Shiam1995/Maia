@@ -1,4 +1,5 @@
 # Maia
+<img width="389" height="556" alt="Maialogo" src="https://github.com/user-attachments/assets/3d43aba8-98e4-4466-8416-365626c6d74a" />
 
 > **愛** — *ai* — Japanese for love.
 
